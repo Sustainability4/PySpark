@@ -56,5 +56,41 @@ df_spark.withRename("previous_columns","new_columns")
 
 
 # Filter operations on Dataframe with Pyspark
+# Dropping the null values 
+df_spark.na.drop(how = "any/all")
+# Use any if you want to drop a row that contains any null value
+# Use all if you want to drop the row if it contains all the null values
+
+df_spark.na.drop(how = "any/all", thresh = 2)
+
+# If we set a threshold value as 2 we say that only delete a row which hs atleast 2 null values. 
+df_spark.na.drop(how = "any/all", subset = ["Column_name"])
+#The above command will only delete rows containing Null values in the particular column
+# Filling the missing values 
+
+df_spark.na.fill("Value that you want to replace Null with", "column name if there is a particular column otherwise can leave blank, you can also provide list of columns")
+
+# Imputer Function
+from pyspark.ml.feature import Imputer 
+imputer = Imputer(
+  inputCols = ["List of Columns"]
+  outputCols = ["List of Output"]
+).setStrategy("mean")
+
+imputer.fit(df_spark).transform(df_spark)
+
+# The above function will create three columns with mean values(running mean)
+# This will ensure that you can replace your null values with the running mean
+
+# Filter as per columns 
+df_spark.filter("column_name"<value).select(["List of columns you want to display with such property"])
+df_spark.filter(("condition_1") &(condition_2))
+
+df_spark.groupby("column_name").sum()
+
+# To find out an aggregate of a column 
+df_spark.agg({"column_name":"sum"})
+
+
 
 
